@@ -5,11 +5,11 @@ from models import Expense
 
 
 class ExpenseTracker:
-    def __init__(self, file_name="expenses.json"):
+    def __init__(self, file_name: str="expenses.json")->None:
         self.file_name = file_name
         self.expenses = self.load()
 
-    def load(self):
+    def load(self)-> list[Expense]:
         if not os.path.exists(self.file_name):
             return []
         with open(self.file_name, "r") as file:
@@ -18,12 +18,12 @@ class ExpenseTracker:
             return []
         return [Expense(d["title"], d["category"], d["amount"], d["date"]) for d in data]
 
-    def save(self):
+    def save(self)->None:
         data = [expense.to_dict() for expense in self.expenses]
         with open(self.file_name, "w") as file:
             json.dump(data, file, indent=4)
 
-    def add(self, title, category, amount):
+    def add(self, title:str, category:str, amount:float)->Expense:
         if amount <= 0:
             raise ValueError("Amount must be more than 0")
         expense = Expense(title.strip().title(), category.strip().lower(), amount)
@@ -31,20 +31,20 @@ class ExpenseTracker:
         self.save()
         return expense
 
-    def total(self):
+    def total(self)->float:
         return sum([expense.amount for expense in self.expenses])
 
-    def totals_by_category(self):
-        totals = {}
+    def totals_by_category(self)-> dict[str, float]:
+        totals: dict[str, float] = {}
         for expense in self.expenses:
             totals[expense.category] = totals.get(expense.category, 0) + expense.amount
         return totals
 
-    def search(self, word):
+    def search(self, word:str)->list[Expense]:
         word = word.strip().lower()
         return [expense for expense in self.expenses if word in expense.title.lower()]
 
-    def delete(self, number):
+    def delete(self, number:int)->Expense:
         if not 1 <= number <= len(self.expenses):
             raise IndexError("That number is not in the list")
         removed = self.expenses.pop(number - 1)

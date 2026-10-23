@@ -3,7 +3,7 @@ import requests
 from currency import get_rate
 from tracker import ExpenseTracker
 
-def add_menu(tracker):
+def add_menu(tracker:ExpenseTracker)->None:
     title = input("What did you spend on? ")
     category = input("Category (food/travel/study/fun/other): ")
     try:
@@ -15,7 +15,7 @@ def add_menu(tracker):
     print(f"Added: {expense}")
 
 
-def view_menu(tracker):
+def view_menu(tracker:ExpenseTracker)->None:
     if not tracker.expenses:
         print("No expenses yet.")
         return
@@ -23,7 +23,7 @@ def view_menu(tracker):
         print(f"{number}. {expense}")
 
 
-def summary_menu(tracker):
+def summary_menu(tracker:ExpenseTracker)->None:
     if not tracker.expenses:
         print("No expenses yet.")
         return
@@ -36,7 +36,7 @@ def summary_menu(tracker):
     except requests.RequestException:
         print("(Could not fetch the dollar rate. Check your internet.)") 
 
-def search_menu(tracker):
+def search_menu(tracker:ExpenseTracker)->None:
     word = input("Search for: ")
     matches = tracker.search(word)
     if not matches:
@@ -46,7 +46,7 @@ def search_menu(tracker):
         print(f"- {expense}")
 
 
-def delete_menu(tracker):
+def delete_menu(tracker:ExpenseTracker)->None:
     view_menu(tracker)
     if not tracker.expenses:
         return
@@ -59,7 +59,7 @@ def delete_menu(tracker):
     print(f"Deleted: {removed.title}")
 
 
-def main():
+def main()->None:
     tracker = ExpenseTracker()
     print("Welcome to Expense Tracker v2!")
 
